@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maciej Kubicki — Product Owner & Business Analyst</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f2ec;
+    --cream: #ede8de;
+    --accent: #b5472a;
+    --accent-light: #d4714f;
+    --muted: #7a7268;
+    --rule: #d4cfc5;
+    --card-bg: #faf8f4;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+    font-weight: 300;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.5;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 0 clamp(1.5rem, 6vw, 6rem);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 55vw;
+    height: 55vw;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, #e8dcc8 0%, transparent 70%);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 0 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 300;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.35s forwards;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-tagline {
+    margin-top: 2.5rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.55s forwards;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 0.85rem 2.2rem;
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: background 0.25s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+
+  .btn-outline {
+    display: inline-block;
+    padding: 0.85rem 2.2rem;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: border-color 0.25s, color 0.25s, transform 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--rule);
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 6vw, 6rem); }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── EXPERTISE GRID ── */
+  .expertise {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .expertise .section-label { color: var(--accent-light); }
+  .expertise .section-title { color: var(--paper); }
+
+  .expertise-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 5rem;
+  }
+
+  .expertise-intro {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(245,242,236,0.65);
+    align-self: end;
+  }
+
+  .domains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .domain-card {
+    background: var(--ink);
+    padding: 2.5rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .domain-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .domain-card:hover { background: #1a1814; }
+  .domain-card:hover::before { transform: scaleX(1); }
+
+  .domain-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--accent-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .domain-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--paper);
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .domain-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: rgba(245,242,236,0.5);
+  }
+
+
+
+  /* ── SKILLS ── */
+  .skills { background: var(--paper); }
+
+  .skills-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 5rem;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .skill-group {
+    padding: 2.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    transition: border-color 0.3s;
+  }
+
+  .skill-group:hover { border-color: var(--accent); }
+
+  .skill-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .skill-list li {
+    font-size: 0.88rem;
+    color: var(--ink);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .skill-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--rule);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── CONTACT ── */
+  .contact {
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact::before {
+    content: 'CONTACT';
+    position: absolute;
+    right: -2%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(8rem, 18vw, 18rem);
+    font-weight: 300;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    white-space: nowrap;
+    letter-spacing: -0.04em;
+  }
+
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contact .section-label { color: var(--accent-light); }
+
+  .contact-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-top: 0.5rem;
+    color: var(--paper);
+  }
+
+  .contact-title em {
+    font-style: italic;
+    color: var(--accent-light);
+  }
+
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .contact-item-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,242,236,0.35);
+  }
+
+  .contact-item-value {
+    font-size: 1.05rem;
+    color: var(--paper);
+  }
+
+  .contact-item-value a {
+    color: var(--paper);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(245,242,236,0.25);
+    padding-bottom: 1px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .contact-item-value a:hover {
+    color: var(--accent-light);
+    border-color: var(--accent-light);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #080807;
+    padding: 1.5rem clamp(1.5rem, 6vw, 6rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: rgba(245,242,236,0.2);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .expertise-header,
+    .exp-header,
+    .skills-header,
+    .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+
+    .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    .timeline-meta { padding-left: 2rem; }
+    .timeline::before { left: 0; }
+    .timeline-item::before { left: -4px; }
+
+    .hero-stats { flex-wrap: wrap; gap: 2rem; }
+
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════ HERO ══════════════════════════════════ -->
+<section class="hero">
+  <nav>
+    <a href="#" class="nav-logo">Maciej Kubicki</a>
+    <ul class="nav-links">
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Product Owner &amp; Business Analyst</p>
+    <h1 class="hero-name">Maciej<br><em>Kubicki</em></h1>
+    <p class="hero-tagline">I bridge the gap between business needs and technology — turning complex requirements into clear, deliverable product roadmaps that create real value.</p>
+    <div class="hero-cta">
+<a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-value">8+</div>
+      <div class="stat-label">Years in Analysis &amp; Modelling</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">4+</div>
+      <div class="stat-label">Years Product Ownership</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">5</div>
+      <div class="stat-label">Industry Sectors</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">2</div>
+      <div class="stat-label">Methodologies (Agile &amp; Waterfall)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ EXPERTISE / DOMAINS ═══════════════════════ -->
+<section class="expertise" id="expertise">
+  <div class="expertise-header">
+    <div>
+      <p class="section-label">Domain Expertise</p>
+      <h2 class="section-title">Industries<br>I've Shaped</h2>
+    </div>
+    <p class="expertise-intro">Across my career I have delivered product and BA work in five distinct sectors. Each domain brought its own regulatory constraints, data complexity, and stakeholder landscape — sharpening my ability to adapt quickly and speak the language of any business.</p>
+  </div>
+
+  <div class="domains-grid">
+    <div class="domain-card">
+      <p class="domain-number">01</p>
+      <h3 class="domain-name">Banking &amp; Financial Services</h3>
+      <p class="domain-desc">Risk modelling, credit process design, SME portfolio management, and A-IRB regulatory compliance across large international banking groups.</p>
+    </div>
+    <div class="domain-card">
+      <p class="domain-number">02</p>
+      <h3 class="domain-name">Biotechnology &amp; Life Sciences</h3>
+      <p class="domain-desc">Software product ownership for laboratory and diagnostics platforms, managing backlogs for complex scientific workflows with strict quality requirements.</p>
+    </div>
+    <div class="domain-card">
+      <p class="domain-number">03</p>
+      <h3 class="domain-name">Logistics &amp; E-fulfilment</h3>
+      <p class="domain-desc">End-to-end requirements specification and backlog prioritisation for fulfilment operations platforms, integrating internal and external stakeholders.</p>
+    </div>
+    <div class="domain-card">
+      <p class="domain-number">04</p>
+      <h3 class="domain-name">Mining &amp; Heavy Industry</h3>
+      <p class="domain-desc">Discovery phase leadership and data science proxy product ownership for industrial digitalisation projects, introducing agile practices to traditional environments.</p>
+    </div>
+    <div class="domain-card">
+      <p class="domain-number">05</p>
+      <h3 class="domain-name">Retail &amp; Mobile Commerce</h3>
+      <p class="domain-desc">UI mock-up design, user story authoring, and multi-team backlog planning for consumer-facing mobile applications in competitive retail markets.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════ SKILLS ══════════════════════════════════ -->
+<section class="skills" id="skills">
+  <div class="skills-header">
+    <div>
+      <p class="section-label">Capabilities</p>
+      <h2 class="section-title">Skills &amp;<br>Toolset</h2>
+    </div>
+    <p style="font-size:1rem;line-height:1.8;color:var(--muted);">A broad toolkit honed across agile and waterfall environments — from facilitating discovery workshops to writing SQL queries and building UI prototypes.</p>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-group">
+      <p class="skill-group-title">Product &amp; BA Practice</p>
+      <ul class="skill-list">
+        <li>Backlog management &amp; prioritisation</li>
+        <li>User Story &amp; Acceptance Criteria writing</li>
+        <li>Requirements elicitation &amp; facilitation</li>
+        <li>UI mock-up design</li>
+        <li>Scrum ceremony facilitation</li>
+        <li>Stakeholder management</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <p class="skill-group-title">Tools &amp; Platforms</p>
+      <ul class="skill-list">
+        <li>JIRA &amp; Confluence</li>
+        <li>Balsamiq Mockups 3</li>
+        <li>BPMN 2.0 &amp; UML 2.0</li>
+        <li>SQL &amp; MS Excel / VBA</li>
+        <li>Enterprise Architect (basics)</li>
+        <li>SoapUI, Mendix (basics)</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <p class="skill-group-title">Methodologies</p>
+      <ul class="skill-list">
+        <li>Agile / Scrum</li>
+        <li>Waterfall</li>
+        <li>Discovery &amp; design thinking</li>
+        <li>Process modelling</li>
+        <li>Data-driven decision making</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <p class="skill-group-title">Languages</p>
+      <ul class="skill-list">
+        <li>Polish — Native</li>
+        <li>English — Advanced</li>
+        <li>German — Basic</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════ CONTACT ══════════════════════════════════ -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div>
+      <p class="section-label">Let's Work Together</p>
+      <h2 class="contact-title">Ready to build<br><em>something great?</em></h2>
+    </div>
+    <div class="contact-details">
+      <div class="contact-item">
+        <span class="contact-item-label">Email</span>
+        <span class="contact-item-value"><a href="mailto:mcj.kubicki@gmail.com">mcj.kubicki@gmail.com</a></span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Phone</span>
+        <span class="contact-item-value"><a href="tel:+48531572690">+48 531 572 690</a></span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Location</span>
+        <span class="contact-item-value">Wrocław, Poland</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">LinkedIn</span>
+        <span class="contact-item-value"><a href="https://www.linkedin.com/in/maciej-kubicki-pl/" target="_blank" rel="noopener">linkedin.com/in/maciej-kubicki-pl</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Maciej Kubicki — Product Owner &amp; Business Analyst</p>
+  <p>Wrocław, Poland</p>
+</footer>
+
+
+</body>
+</html>
